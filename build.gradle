@@ -1,0 +1,53 @@
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'idea'
+apply plugin: 'org.akhikhl.gretty'
+
+buildscript {
+  repositories {
+    jcenter()
+  }
+
+  dependencies {
+    classpath 'org.akhikhl.gretty:gretty:+'
+  }
+}
+
+gretty {
+  httpPort = 8081
+  contextPath = 'test'
+  servletContainer = 'jetty9'
+  jvmArgs = ['-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005','-Dorg.eclipse.jetty.annotations.maxWait=120']
+}
+
+// JDK 8
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url "http://nexus.sb.karmalab.net/nexus/content/repositories/payments-releases/" }
+    maven { url "http://nexus.sb.karmalab.net/nexus/content/repositories/central/" }
+}
+
+dependencies {
+
+    compile 'com.expedia.payments.secret:spring-vault-aws-authenticator:0.0.5'
+    compile 'ch.qos.logback:logback-classic:1.1.3'
+    compile 'javax.servlet:jstl:1.2'
+    compile 'org.projectlombok:lombok:1.16.10'
+    compile 'org.springframework:spring-webmvc:4.+'
+    compile 'org.springframework.vault:spring-vault-core:1.+'
+    compile 'org.springframework.cloud:spring-cloud-context:1.+'
+    compile 'org.springframework.cloud:spring-cloud-starter-config:1.+'
+
+	//include in compile only, exclude in the war
+	providedCompile 'javax.servlet:servlet-api:2.5'
+	
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = "4.0"
+}
+
