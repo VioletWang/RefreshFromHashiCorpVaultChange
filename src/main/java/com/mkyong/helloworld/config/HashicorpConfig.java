@@ -42,10 +42,9 @@ public class HashicorpConfig extends AbstractVaultConfiguration{
 
     @Override
     public ClientAuthentication clientAuthentication() {
-        return new TokenAuthentication("95f2b8fb-91f3-5c7f-bd83-d8ea7810aaee");
-//        return AwsAccessKeyClientAuthenticator.builder()
-//                .withStsAuthEndpoint(VAULT_STS_ENDPOINT)
-//                .build();
+       return AwsAccessKeyClientAuthenticator.builder()
+               .withStsAuthEndpoint(VAULT_STS_ENDPOINT)
+               .build();
     }
 
     @Bean (name = "applicationSecretMap")
